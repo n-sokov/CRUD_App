@@ -2,11 +2,52 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Person</title>
+    <title>Человек</title>
 </head>
 <body>
 
-<p th:text="${person.getName() + ', ' + person.getYear_of_birth()}">VALUE</p>
+<p th:text="${person.getName()} + ', ' + ${person.getYear_of_birth()}">VALUE</p>
+
+<div th:if="${booksOwner.isEmpty()}">
+    <form th:method="GET" th:action="@{/books}">
+        <label for="library">Человек пока не взял ни одной книги</label>
+        <input type="submit" value="Перейти в библиотеку" id="library"/>
+    </form>
+</div>
+
+<div th:if="${!booksOwner.isEmpty()}">
+    <hr/>
+    <table>
+        <thead>
+            <strong>Книги:<br/>
+            </strong>
+        </thead>
+        <div th:each="book: ${booksOwner}">
+            <tr th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+            </tr>
+        </div>
+        <br/>
+        <form th:method="GET" th:action="@{/books}">
+            <input type="submit" value="Перейти в библиотеку"/>
+        </form>
+    </table>
+</div>
+
+<hr/>
+
+<table>
+    <tr>
+        <form th:method="GET" th:action="@{/people/{person_id}/edit(person_id=${person.getPerson_id()})}">
+            <input type="submit" value="Редактировать"/>
+        </form>
+    </tr>
+    <br/>
+    <tr>
+        <form th:method="DELETE" th:action="@{/people/{person_id}(person_id=${person.getPerson_id()})}">
+            <input type="submit" value="Удалить"/>
+        </form>
+    </tr>
+</table>
 
 </body>
 </html>
